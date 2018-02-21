@@ -36,5 +36,10 @@ while two_t >= 2: #break this loop manually
         break
     two_t += 1
 
-print(k_list)
-    
+#last step: print out requests
+for n in fract_list:
+    for purity in k_list:
+        if purity[0] < n:
+            print(purity[1])
+            break
+
