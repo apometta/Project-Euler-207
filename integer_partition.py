@@ -5,6 +5,8 @@ https://www.hackerrank.com/contests/projecteuler/challenges/euler/207
 
 The readme file in this project explains the problem, solution and plan in 
 more detail.  Please consult the readme for explanations for certain decisions.
+Be aware that this current implementation is considered too slow to work: it 
+times out on everything past the first test case.
 """
 
 import sys
