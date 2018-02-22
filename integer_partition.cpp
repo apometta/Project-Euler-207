@@ -12,7 +12,8 @@ using namespace std;
 
 //Returns if the inputted integer is a power of 2.  If the integer bitwise
 //ANDed with itself minus 1 is 0, that means that in binary it's a 1 followed
-//by some amount of 0's - a power of 2.
+//by some amount of 0's - a power of 2.  Unnecessary for the sophisticated
+//attempt.
 #define lint unsigned long long
 bool power_of_2(lint n){
   return (n & (n-1)) == 0;
@@ -21,3 +22,4 @@ bool power_of_2(lint n){
 int main(){
   return 0;
 }
+
