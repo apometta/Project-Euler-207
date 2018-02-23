@@ -42,6 +42,6 @@ naive: PSRC
 	python3 $(PSRC)
 
 test: $(TFLS)
-	$(EXEC) <$(TST1)
-	$(EXEC) <$(TST2)
-	$(EXEC) <$(TST3)
+	./$(EXEC) <$(TST1)
+	./$(EXEC) <$(TST2)
+	./$(EXEC) <$(TST3)

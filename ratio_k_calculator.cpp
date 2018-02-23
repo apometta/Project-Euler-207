@@ -48,7 +48,7 @@ int RatioKCalculator::getRange(bdouble r_goal) const {
     }
     return 0;
   }
-  for (int i = 1; i < K_CALC_MAXRANGE - 1; ++i){}
+  for (int i = 1; i < K_CALC_MAXRANGE - 1; ++i){
     if (range_storage[i + 1] > r_goal) continue;
     /*It's possible that the desired 2^k can actually be in the range before
       this, since the perfection ratios at t = i and t = i - 1 might both be
