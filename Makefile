@@ -7,7 +7,9 @@
 #The default target, or main, compiles for the relevant files the main
 #integer_partition executable.  clean removes the executable.  Naive runs the
 #python program, and test tests the program on the three test files in the
-#test directory.
+#test directory.  The merge target is for making the merged .cpp file and
+#compiling it - it is not to be used for anything other than submitting to
+#HackerRank.
 
 #The use of an unnecessarily large amount of macros is an old habit.
 
@@ -22,6 +24,7 @@ TST2 = test/test2.txt
 TST3 = test/test3.txt
 TFLS = test/test*.txt
 PSRC = naive_attempt.py
+MERG = $(EXEC)_merged.cpp
 
 all: main
 
@@ -45,3 +48,6 @@ test: $(TFLS)
 	./$(EXEC) <$(TST1)
 	./$(EXEC) <$(TST2)
 	./$(EXEC) <$(TST3)
+
+merge: $(MERG)
+	$(COMP) $(MERG) -o $(EXEC)_merged
