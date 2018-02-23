@@ -4,6 +4,7 @@
 #include "ratio_k_calculator.hpp"
 #include <cmath>
 #include <cassert>
+#include <iostream>
 using namespace std;
 #define MINRATIO range_storage[0]
 
@@ -21,17 +22,40 @@ RatioKCalculator::RatioKCalculator(){
   }
   assert(range_storage[1] == 1);
   //debug
-  for (int i = 1; i < 5; ++i) cout << "range_storage[" << i << "] = " <<
-				range_storage[i] << endl;
+  for (int i = 1; i < 5; ++i) std::cout << "range_storage[" << i << "] = " <<
+				range_storage[i] << std::endl;
 }
 
-int getRange(bdouble r_goal){
+//return the lower bound of the t range our goal ratio is in.
+int RatioKCalculator::getRange(bdouble r_goal) const {
   //desired ratio can't be 1, or less than the best we can do
   if (r_goal < MINRATIO || r_goal >= 1) return 0;
   for (int i = 1; i < 60; ++i){
     if (range_storage[i + 1] > r_goal) continue;
-    else if (range_storage[i] == r_goal) return i - 1;
-    else if (range_storage[i] < r_goal) return i;
+    //i should be our range, but we ensure manually that it isn't before,
+    //which occasionally is the case.  see readme
+    bdouble prev = (i - 1)/(exp2((bdouble)i) - 2);
+    if (prev < r_goal) return i - 1;
+    else return i;
   }
+  return 0;
+}
+
+//get the right TwoT from the range.  Assumes the range is correct.
+lint RatioKCalculator::getTwoTInRange(bdouble r_goal, int range) const {
+  //squelch warnings
+  (void) r_goal;
+  (void) range;
+  return 0;
+}
+
+lint RatioKCalculator::getK(bdouble r_goal) const {
+  (void) r_goal;
+  return 0;
+}
+
+lint RatioKCalculator::getK(lint a, lint b) const {
+  (void) a;
+  (void) b;
   return 0;
 }
