@@ -14,9 +14,14 @@ using namespace std;
 
 //constructor, fills range_storage
 RatioKCalculator::RatioKCalculator(){
+<<<<<<< HEAD
   //fill range_storage 0 with 0 to prevent unforeseen access errors, and return the
   //failure result.
   range_storage[0] = 0;
+=======
+  range_storage[0] = 0; //keeping this filled prevents unassigned value access errors
+                        //and returns 
+>>>>>>> 9a5fbab9608f2b83d52d1650c6b1c79852540149
   //fill range storage with preset values
   for (int i = 1; i < K_CALC_MAXRANGE; ++i){
     //ensure i is a bdouble so calculations don't go badly with integer truncation
