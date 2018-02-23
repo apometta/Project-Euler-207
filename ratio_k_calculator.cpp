@@ -1,18 +1,21 @@
-/*Implementation file for ratio k calculator class.  Update comments later.
-  Code by Andrew H. Pometta.  */
+/*Author: Andrew H. Pometta
+  Last Updated: 2/23/2018
+
+  This file implements the RatioKCalculator class defined in ratio_k_calculator.hpp.
+  See the header file for details on the exact purpose of this class, or the readme.
+
+  For all functions, a return value of 0 means failure. */
 
 #include "ratio_k_calculator.hpp"
 #include <cmath>
 #include <cassert>
-#include <iostream>
+#include <iostream> //debugging, delete later
 using namespace std;
 
 //constructor, check for range error when running
 RatioKCalculator::RatioKCalculator(){
-  //the 0th slot stores the lowest possible ratio.  if we get one with less
-  //than this than we err out.
-  bdouble max_two_t = exp2(bdouble(K_CALC_MAXRANGE - 1));
-  range_storage[0] = (K_CALC_MAXRANGE - 2)/(max_two_t - 1);
+  range_storage[0] = 0; //keeping this filled prevents unassigned value access errors
+                        //and returns 
   //fill range storage with preset values
   for (int i = 1; i < K_CALC_MAXRANGE; ++i){
     //ensure i is a bdouble so calculations don't go badly with rounding
