@@ -13,7 +13,18 @@ using namespace std;
 
 int main(){
   RatioKCalculator calc;
-  calc.test();
-  return 0;
+  int q;
+  cin >> q;
+  for (int i = 0; i < q; ++i){
+    lint a, b;
+    cin >> a >> b;
+    lint k = calc.getK(a, b);
+    if (k == 0){
+      cerr << "K acquisition failed at a = " << a << ", b = " << b << endl;
+      return EXIT_FAILURE;
+    }
+    cout << k << endl;
+  }
+  return EXIT_SUCCESS;
 }
 

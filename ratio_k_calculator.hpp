@@ -5,6 +5,7 @@
 #ifndef RATIO_K_CALCULATOR_H
 #define RATIO_K_CALCULATOR_H
 
+#include <iostream>
 typedef long double bdouble;
 typedef unsigned long long int lint;
 
@@ -20,7 +21,7 @@ private:
   //range invalid
   lint getTwoTInRange(bdouble r_goal, int range) const;
   //get the K value from a two_t value
-  lint convertTwoTToK(lint two_t) const {return two_t * (two_t - 1);}
+  lint convertTwoTToK(lint two_t) const { return two_t * (two_t - 1); }
 
 public:
   //constructor
@@ -29,7 +30,6 @@ public:
   lint getK(bdouble r_goal) const;
   //get K given to unsigned long long ints
   lint getK(lint a, lint b) const { return getK((bdouble) a / (bdouble) b); }
-  void test() const; //for testing, remove later
 };
 
 #endif

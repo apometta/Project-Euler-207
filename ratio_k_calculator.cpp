@@ -4,7 +4,7 @@
 #include "ratio_k_calculator.hpp"
 #include <cmath>
 #include <cassert>
-#include <iostream> //for debugging
+#include <iostream>
 using namespace std;
 #define MINRATIO range_storage[0]
 
@@ -20,7 +20,6 @@ RatioKCalculator::RatioKCalculator(){
     bdouble t = (bdouble) i;
     range_storage[i] = t/(exp2(t) - 1);
   }
-  assert(range_storage[1] == 1);
 }
 
 //return the lower bound of the t range our goal ratio is in.
@@ -33,23 +32,41 @@ int RatioKCalculator::getRange(bdouble r_goal) const {
     //which occasionally is the case.  see readme
     bdouble prev = (i - 1)/(exp2((bdouble)i) - 2);
     if (prev < r_goal) return i - 1;
-    else return i;
-  }
+    //it could also be the case that the very last viable 2^t has a ratio exactly
+    //equal to r_goal, which is bad.  If that's the case, we must use the next range
+    bdouble next = i/(exp2((bdouble)(i + 1)) - 2);
+    if (next == r_goal){
+      if (i < 59) return i + 1; //sanity check that we don't return 60
+      else return 0;
+    }
+    return i;
+  } //if for some reason we don't make it, return fail
   return 0;
 }
 
 //get the right TwoT from the range.  Assumes the range is correct.
 lint RatioKCalculator::getTwoTInRange(bdouble r_goal, int range) const {
-  (void) r_goal;
-  (void) range;
-  return 0;
+  //it should be noted here that, assuming r_goal meets the necessary requirements of
+  //0 < r_goal < 1 and the rest of the program is working properly, that
+  //1 < range < 60.
+  if (0 < r_goal && r_goal < 1 && range < 1 && range < 60) return 0;
+  int t = range; //renaming for clarity
+  //formula: purity = t/(2^t - 1), we need to find 2^t.  thus:
+  //2^t = (t/purity) + 1
+  //since r_goal is what we want to become less than, we round up.  if it's exact, we
+  //add one.  then find proper ratio and return
+  //only caveat is if two_t before the 
+  lint two_t = (lint)(t / r_goal) + 1;
+  //we add one more because casting as lint either rounds down - meaning we go up one
+  //more - or it got us an exact match, and since the desired ratio must be strictly
+  //less than r_goal, we need to go up one.
+  //the only caveat is if we land two_t exactly on the two_t right before the next
+  //pure partition.  however, the getRange checks assure this does not happen
+  two_t++;
+  return two_t;
 }
 
 lint RatioKCalculator::getK(bdouble r_goal) const {
-  (void) r_goal;
-  return 0;
-}
-
-void RatioKCalculator::test() const{
-
+  //the monster call
+  return convertTwoTToK(getTwoTInRange(r_goal, getRange(r_goal)));
 }

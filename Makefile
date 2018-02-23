@@ -12,7 +12,7 @@ OFLS = $(DEP).o
 TEST = test/test*.txt
 PSRC = naive_attempt.py
 
-all: allX
+all: main
 
 #Compiles main program.
 main: $(CSRC)
