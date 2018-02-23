@@ -12,6 +12,8 @@ solution, etc. */
 using namespace std;
 
 int main(){
+  RatioKCalculator *calc = new RatioKCalculator();
+  delete calc;
   return 0;
 }
 

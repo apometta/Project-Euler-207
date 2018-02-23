@@ -23,3 +23,5 @@ $(DEP).cpp: $(DEP).hpp
 $(MAIN).cpp:
 	$(COMP) -c $@
 
+clean: $(MAIN)
+	rm $(MAIN)

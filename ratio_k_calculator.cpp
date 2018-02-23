@@ -4,7 +4,6 @@
 #include "ratio_k_calculator.hpp"
 #include <cmath>
 #include <cassert>
-#include <iostream>
 using namespace std;
 #define MINRATIO range_storage[0]
 
@@ -21,9 +20,6 @@ RatioKCalculator::RatioKCalculator(){
     range_storage[i] = t/(exp2(t) - 1);
   }
   assert(range_storage[1] == 1);
-  //debug
-  for (int i = 1; i < 5; ++i) std::cout << "range_storage[" << i << "] = " <<
-				range_storage[i] << std::endl;
 }
 
 //return the lower bound of the t range our goal ratio is in.
@@ -43,7 +39,6 @@ int RatioKCalculator::getRange(bdouble r_goal) const {
 
 //get the right TwoT from the range.  Assumes the range is correct.
 lint RatioKCalculator::getTwoTInRange(bdouble r_goal, int range) const {
-  //squelch warnings
   (void) r_goal;
   (void) range;
   return 0;
