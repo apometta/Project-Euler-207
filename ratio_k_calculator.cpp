@@ -12,13 +12,14 @@
 #include <iostream> //debugging, delete later
 using namespace std;
 
-//constructor, check for range error when running
+//constructor, fills range_storage
 RatioKCalculator::RatioKCalculator(){
-  range_storage[0] = 0; //keeping this filled prevents unassigned value access errors
-                        //and returns 
+  //fill range_storage 0 with 0 to prevent unforeseen access errors, and return the
+  //failure result.
+  range_storage[0] = 0;
   //fill range storage with preset values
   for (int i = 1; i < K_CALC_MAXRANGE; ++i){
-    //ensure i is a bdouble so calculations don't go badly with rounding
+    //ensure i is a bdouble so calculations don't go badly with integer truncation
     bdouble t = (bdouble) i;
     range_storage[i] = t/(exp2(t) - 1);
   }
@@ -74,7 +75,7 @@ lint RatioKCalculator::getTwoTInRange(bdouble r_goal, int range) const {
   //2^t = (t/purity) + 1
   //since r_goal is what we want to become less than, we round up.  if it's exact, we
   //add one.  then find proper ratio and return
-  //only caveat is if two_t before the 
+  //only caveat is if two_t before the
   lint two_t = (lint)(t / r_goal) + 1;
   //we add one more because casting as lint either rounds down - meaning we go up one
   //more - or it got us an exact match, and since the desired ratio must be strictly
