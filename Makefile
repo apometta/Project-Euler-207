@@ -1,7 +1,15 @@
-#Makefile, written by Andrew H. Pometta, for the purposes of compiling
-#Project Euler Question 207 for HackerRank.  default target creates the
-#integer_partition executable from ratio_k_calculator files and
-#integer_partition.cpp.  Make naive makes the Python naive attempt.
+#Author: Andrew H. Pometta
+#Last Updated: 2/23/2018
+
+#This Makefile is for compiling the HackerRank edition of Project Euler
+#problem #207, available at:
+#https://www.hackerrank.com/contests/projecteuler/challenges/euler207
+#The default target, or main, compiles for the relevant files the main
+#integer_partition executable.  clean removes the executable.  Naive runs the
+#python program, and test tests the program on the three test files in the
+#test directory.
+
+#The use of an unnecessarily large amount of macros is an old habit.
 
 COMP = g++ -std=c++11 -Wall -Wextra
 DEP = ratio_k_calculator
@@ -9,7 +17,10 @@ EXEC = integer_partition
 HSRC = $(DEP).hpp
 CSRC = $(DEP).cpp $(EXEC).cpp
 OFLS = $(DEP).o
-TEST = test/test*.txt
+TST1 = test/test.txt
+TST2 = test/test2.txt
+TST3 = test/test3.txt
+TFLS = test/test*.txt
 PSRC = naive_attempt.py
 
 all: main
@@ -24,10 +35,13 @@ $(DEP).cpp: $(DEP).hpp
 $(EXEC).cpp:
 	$(COMP) -c $@
 
-allX: main cleanX
-
-cleanX:
-	rm $(OFLS)
-
 clean: $(EXEC)
 	rm $(EXEC)
+
+naive: PSRC
+	python3 $(PSRC)
+
+test: $(TFLS)
+	$(EXEC) <$(TST1)
+	$(EXEC) <$(TST2)
+	$(EXEC) <$(TST3)

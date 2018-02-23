@@ -1,8 +1,9 @@
 /*Author: Andrew H. Pometta
   Last Updated: 2/23/2018
-
-  This file implements the RatioKCalculator class defined in ratio_k_calculator.hpp.
-  See the header file for details on the exact purpose of this class, or the readme.
+890
+  This file implements the RatioKCalculator class defined in
+  ratio_k_calculator.hpp.  See the header file for details on the exact purpose
+  of this class, or the readme.
 
   For all functions, a return value of 0 means failure. */
 
@@ -14,17 +15,13 @@ using namespace std;
 
 //constructor, fills range_storage
 RatioKCalculator::RatioKCalculator(){
-<<<<<<< HEAD
-  //fill range_storage 0 with 0 to prevent unforeseen access errors, and return the
-  //failure result.
+  //fill range_storage 0 with 0 to prevent unforeseen access errors, and return
+  //the failure result.
   range_storage[0] = 0;
-=======
-  range_storage[0] = 0; //keeping this filled prevents unassigned value access errors
-                        //and returns 
->>>>>>> 9a5fbab9608f2b83d52d1650c6b1c79852540149
   //fill range storage with preset values
   for (int i = 1; i < K_CALC_MAXRANGE; ++i){
-    //ensure i is a bdouble so calculations don't go badly with integer truncation
+    //ensure i is a bdouble so calculations don't go badly with integer
+    //truncation
     bdouble t = (bdouble) i;
     range_storage[i] = t/(exp2(t) - 1);
   }
@@ -41,7 +38,7 @@ int RatioKCalculator::getRange(bdouble r_goal) const {
     }
     return 0;
   }
-  for (int i = 1; i < K_CALC_MAXRANGE - 1; ++i){ //will not operate on last element
+  for (int i = 1; i < K_CALC_MAXRANGE - 1; ++i){}
     if (range_storage[i + 1] > r_goal) continue;
     //i should be our range, but we ensure manually that it isn't before,
     //which occasionally is the case.  see readme
@@ -51,14 +48,14 @@ int RatioKCalculator::getRange(bdouble r_goal) const {
       std::cout << i << std::endl;
       return i - 1;
     }
-    //it could also be the case that the very last viable 2^t has a ratio exactly
-    //equal to r_goal, which is bad.  If that's the case, we must use the next range
+    //It could also be the case that the very last viable 2^t has a ratio
+    //exactly equal to r_goal, which is bad.  If that's the case, we must use
+    //the next range above this.
     bdouble next = i/(exp2((bdouble)(i + 1)) - 2);
     if (next == r_goal){
       if (i < K_CALC_MAXRANGE - 1){
-	std::cout << "returning successfully in getRange with i increment, i = ";
-	std::cout << i << std::endl;
-	return i + 1; //sanity check that we don't return 60
+	      std::cout << i << std::endl;
+	      return i + 1; //sanity check that we don't return too high
       }
       return 0;
     }
