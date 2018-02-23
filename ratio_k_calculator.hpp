@@ -8,11 +8,13 @@
 #include <iostream>
 typedef long double bdouble;
 typedef unsigned long long int lint;
+#define K_CALC_MINRATIO range_storage[0]
+#define K_CALC_MAXRANGE 67
 
 /*Class for calculating smallest viable k from given ratio.  Complete later. */
 class RatioKCalculator {
 private:
-  bdouble range_storage[61]; //double array for storing
+  bdouble range_storage[K_CALC_MAXRANGE]; //double array for storing
   //range checkpoints, the 0'th slot is the max
 
   //get range of riven ratio with linear search, 0 on fail
