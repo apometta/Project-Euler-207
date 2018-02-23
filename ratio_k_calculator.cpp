@@ -25,11 +25,6 @@ RatioKCalculator::RatioKCalculator(){
     bdouble t = (bdouble) i;
     range_storage[i] = t/(exp2(t) - 1);
   }
-  //debugging
-  bdouble lowest_ratio_num = ((bdouble)K_CALC_MAXRANGE - 2);
-  bdouble lowest_ratio_den = exp2((bdouble)K_CALC_MAXRANGE - 1) - 2;
-  bdouble lowest_ratio = lowest_ratio_num / lowest_ratio_den;
-  std::cout << "DEBUG: lowest_ratio = " << lowest_ratio << std::endl;
 }
 
 /*Given a perfection ratio r_goal, there exists a 2^t in a partition which
@@ -48,8 +43,9 @@ int RatioKCalculator::getRange(bdouble r_goal) const {
     }
     return 0;
   }
-  for (int i = 1; i < K_CALC_MAXRANGE - 1; ++i){
-    if (range_storage[i + 1] > r_goal) continue;
+  for (int i = 1; i < K_CALC_MAXRANGE; ++i){
+    //we're relying on lazy evaluation to not err out on final element in list
+    if (i < K_CALC_MAXRANGE - 1 && range_storage[i + 1] > r_goal) continue;
     /*It's possible that the desired 2^k can actually be in the range before
       this, since the perfection ratios at t = i and t = i - 1 might both be
       larger than desired, but due to the decreasing-increasing nature of the
@@ -72,13 +68,13 @@ int RatioKCalculator::getRange(bdouble r_goal) const {
   r_goal must be strictly between 0 and 1, and range must be between 1
   inclusive and K_CALC_MAXRANGE - 1 inclusive. */
 lint RatioKCalculator::getTwoTInRange(bdouble r_goal, int range) const {
-  if (0 >= r_goal || r_goal >= 1){
-    std::cerr << "Error: r_goal of " << r_goal << "not within acceptable ";
+  if (r_goal <= 0 || r_goal >= 1){
+    std::cerr << "Error: r_goal of " << r_goal << " not within acceptable ";
     std::cerr << "boundaries of 0 and 1." << std::endl;
     return 0;
   }
   if (range < 1 || range >= K_CALC_MAXRANGE){
-    std::cerr << "Error: range of " << range << "not within acceptable ";
+    std::cerr << "Error: range of " << range << " not within acceptable ";
     std::cerr << "boundaries of 1 and " << K_CALC_MAXRANGE - 1 << ".";
     std::cerr << std::endl;
     return 0;
@@ -87,7 +83,16 @@ lint RatioKCalculator::getTwoTInRange(bdouble r_goal, int range) const {
   /* Formula for 2^t with exact perfection ratio, where r = ratio:
     2^t = (t/r) + 1
     For details on how this is acquired see readme. */
-  lint two_t = (lint)(t / r_goal) + 1;
+  bdouble two_t_float = (t/r_goal) + 1;
+  /*I did a lot of debugging and found that sometimes, even within the range
+    of acceptable a and b values, we simply get an overflow, in either the
+    bdouble or the lint, and it wraps back around.  There's nothing that can
+    really be done about this other than ignoring it and hoping it doesn't
+    matter or finding and using a library that allows >64bit numbers and
+    doubles with even more precision - more work than it's worth.
+
+    Basically, just hope that this doesn't screw up. */
+  lint two_t = (lint)two_t_float;
   /*Nonetheless we add one more to our 2^t.  The reason for this is as follows:
     We need the first 2^t with a perfection ratio LESS THAN the desired
     ratio inputted, the goal ratio.  That means the 2^t we want should be as
@@ -113,9 +118,9 @@ lint RatioKCalculator::getTwoTInRange(bdouble r_goal, int range) const {
 /*Takes in the bdouble r_goal and returns the k value corresponding to the
   correct answer.  Just calls the other methods.  Returns 0 on failure. */
 lint RatioKCalculator::getK(bdouble r_goal) const {
-  if (r_goal < 0 || r_goal > 1){
-    std::cerr << "Error: r_goal of " << r_goal << "not within acceptable";
-    std::cerr << "boundaries of 0 and 1." << std::endl;
+  if (r_goal < K_CALC_MINRATIO || r_goal > 1){
+    std::cerr << "Error: r_goal of " << r_goal << " not within acceptable";
+    std::cerr << " boundaries of 0 and 1." << std::endl;
     return 0;
   }
   //The monster call.  If 0 is returned at any method, the whole thing

@@ -13,8 +13,8 @@
 //faster ways of typing long winded variable names.
 typedef long double bdouble;
 typedef unsigned long long int lint;
-#define K_CALC_MINRATIO 1/1e18 //based on problem restrictions on a and b
-#define K_CALC_MAXRANGE 62 //can be set to change code-wide maximum 2^t
+#define K_CALC_MINRATIO 1/(1e18 + 1) //based on problem restrictions on a and b
+#define K_CALC_MAXRANGE 67 //can be set to change code-wide maximum 2^t
 
 class RatioKCalculator {
 private:
