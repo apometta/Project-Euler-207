@@ -5,23 +5,29 @@
 
 COMP = g++ -std=c++11 -Wall -Wextra
 DEP = ratio_k_calculator
-MAIN = integer_partition
+EXEC = integer_partition
 HSRC = $(DEP).hpp
-CSRC = $(DEP).cpp $(MAIN).cpp
+CSRC = $(DEP).cpp $(EXEC).cpp
+OFLS = $(DEP).o
 TEST = test/test*.txt
 PSRC = naive_attempt.py
 
-all: main
+all: allX
 
 #Compiles main program.
 main: $(CSRC)
-	$(COMP) $(CSRC) -o $(MAIN)
+	$(COMP) $(CSRC) -o $(EXEC)
 
 $(DEP).cpp: $(DEP).hpp
 	$(COMP) -c $@
 
-$(MAIN).cpp:
+$(EXEC).cpp:
 	$(COMP) -c $@
 
-clean: $(MAIN)
-	rm $(MAIN)
+allX: main cleanX
+
+cleanX:
+	rm $(OFLS)
+
+clean: $(EXEC)
+	rm $(EXEC)

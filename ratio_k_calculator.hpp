@@ -28,7 +28,7 @@ public:
   //get K given ratio
   lint getK(bdouble r_goal) const;
   //get K given to unsigned long long ints
-  lint getK(lint a, lint b) const;
+  lint getK(lint a, lint b) const { return getK((bdouble) a / (bdouble) b); }
   void test() const; //for testing, remove later
 };
 

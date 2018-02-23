@@ -50,12 +50,6 @@ lint RatioKCalculator::getK(bdouble r_goal) const {
   return 0;
 }
 
-lint RatioKCalculator::getK(lint a, lint b) const {
-  (void) a;
-  (void) b;
-  return 0;
-}
-
 void RatioKCalculator::test() const{
-  std::cout << "range of 5/31 = " << RatioKCalculator::getRange((bdouble) 5/31) << std::endl;
+
 }
