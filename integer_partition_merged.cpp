@@ -217,7 +217,7 @@
 
   #include <iostream>
   #include <cstdlib>
-  #include "ratio_k_calculator.hpp"
+//  #include "ratio_k_calculator.hpp"
   using namespace std;
 
   int main(){
