@@ -29,6 +29,7 @@ public:
   lint getK(bdouble r_goal) const;
   //get K given to unsigned long long ints
   lint getK(lint a, lint b) const;
+  void test() const; //for testing, remove later
 };
 
 #endif

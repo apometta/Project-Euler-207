@@ -4,6 +4,7 @@
 #include "ratio_k_calculator.hpp"
 #include <cmath>
 #include <cassert>
+#include <iostream> //for debugging
 using namespace std;
 #define MINRATIO range_storage[0]
 
@@ -53,4 +54,8 @@ lint RatioKCalculator::getK(lint a, lint b) const {
   (void) a;
   (void) b;
   return 0;
+}
+
+void RatioKCalculator::test() const{
+  std::cout << "testing working" << std::endl;
 }
