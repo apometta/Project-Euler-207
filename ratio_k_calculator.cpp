@@ -24,6 +24,7 @@ RatioKCalculator::RatioKCalculator(){
     //truncation
     bdouble t = (bdouble) i;
     range_storage[i] = t/(exp2(t) - 1);
+    range_mins[i] = t/(exp2(t + 1) - 2);
   }
 }
 
@@ -35,29 +36,18 @@ RatioKCalculator::RatioKCalculator(){
 
   r_goal must be strictly between 0 and 1.  Returns 0 if failure. */
 int RatioKCalculator::getRange(bdouble r_goal) const {
-  if (r_goal < K_CALC_MINRATIO || r_goal >= 1) {
-    if (r_goal >= 1) std::cerr << "r_goal >= 1 at " << r_goal << std::endl;
+  if (r_goal < K_CALC_MINRATIO || r_goal > 1) {
+    if (r_goal >= 1) std::cerr << "r_goal > 1 at " << r_goal << std::endl;
     else {
       std::cerr << "r_goal < MINRATIO, which is " << K_CALC_MINRATIO;
       std::cerr << ", r_goal is " << r_goal << std::endl;
     }
     return 0;
   }
+  //Find the range by going through the minimums and picking the first one.
   for (int i = 1; i < K_CALC_MAXRANGE; ++i){
-    //we're relying on lazy evaluation to not err out on final element in list
-    if (i < K_CALC_MAXRANGE - 1 && range_storage[i + 1] > r_goal) continue;
-    /*It's possible that the desired 2^k can actually be in the range before
-      this, since the perfection ratios at t = i and t = i - 1 might both be
-      larger than desired, but due to the decreasing-increasing nature of the
-      function of perfection ratios, it could have crossed our desired ratio.
-
-      Simple test: test if the smallest perfection ratio of the previous range
-      is less than ours.  If it is, use the previous range.  Else use this one.
-    */
-    bdouble prev = (i - 1)/(exp2((bdouble)i) - 2);
-    if (prev < r_goal) return i - 1;
-    else return i;
-  } //if for some reason we don't make it, return fail
+    if (range_mins[i] < r_goal) return i;
+  }
   std::cerr << "Failed to find range in getRange." << std::endl;
   return 0;
 }
@@ -68,7 +58,7 @@ int RatioKCalculator::getRange(bdouble r_goal) const {
   r_goal must be strictly between 0 and 1, and range must be between 1
   inclusive and K_CALC_MAXRANGE - 1 inclusive. */
 lint RatioKCalculator::getTwoTInRange(bdouble r_goal, int range) const {
-  if (r_goal <= 0 || r_goal >= 1){
+  if (r_goal <= 0 || r_goal > 1){
     std::cerr << "Error: r_goal of " << r_goal << " not within acceptable ";
     std::cerr << "boundaries of 0 and 1." << std::endl;
     return 0;

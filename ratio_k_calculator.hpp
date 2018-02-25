@@ -21,11 +21,14 @@ private:
   /*range_storage stores the perfection ratios at each integer t.  the index is
     t, the value is the perfection ratio. */
   bdouble range_storage[K_CALC_MAXRANGE];
+  /*range_mins is, given a corresponding range, the minimum perfection ratio
+    possible within that range.  Useful for finding the range for a 2^t. */
+  bdouble range_mins[K_CALC_MAXRANGE];
 
   /*getRange takes in the desired perfection ratio r_goal, and returns an index
     t.  This index is used in range_storage to find the appropriate range,
     laterneeded when calculating the correct 2^t.  This can be a somewhat
-    involvedprocess.  r_goal must be between 0 exclusive and 1 exclusive.  If
+    involvedprocess.  r_goal must be between 0 exclusive and 1 inclusive.  If
     this condition is not met, or the method otherwise fails, a value of 0 is
     returned.  */
   int getRange(bdouble r_goal) const;
@@ -50,7 +53,7 @@ public:
 
   /*Given desired perfection ratio, getK with the long double argument uses the
     above methods to calculate the needed K and returns it.  r_goal must be
-    between 0 exclusive and 1 exclusive.  If it is not, or the conversion fails
+    between 0 exclusive and 1 inclusive.  If it is not, or the conversion fails
     for any reason, a value of 0 is returned. */
   lint getK(bdouble r_goal) const;
 
