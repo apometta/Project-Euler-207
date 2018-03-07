@@ -14,13 +14,10 @@
 typedef long double bdouble;
 typedef unsigned long long int lint;
 #define K_CALC_MINRATIO 1/(1e18 + 1) //based on problem restrictions on a and b
-#define K_CALC_MAXRANGE 67 //can be set to change code-wide maximum 2^t
+#define K_CALC_MAXRANGE 65 //can be set to change code-wide maximum 2^t
 
 class RatioKCalculator {
 private:
-  /*range_storage stores the perfection ratios at each integer t.  the index is
-    t, the value is the perfection ratio. */
-  bdouble range_storage[K_CALC_MAXRANGE];
   /*range_mins is, given a corresponding range, the minimum perfection ratio
     possible within that range.  Useful for finding the range for a 2^t. */
   bdouble range_mins[K_CALC_MAXRANGE];

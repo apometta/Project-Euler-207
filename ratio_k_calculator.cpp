@@ -15,16 +15,18 @@ using namespace std;
 /*The public constructor for RatioKCalculator fills the range_storage array
   with the relevant perfection ratios, where the t value is the index. */
 RatioKCalculator::RatioKCalculator(){
-  //fill range_storage 0 with 0 to prevent unforeseen access errors, and return
+  //fill range_mins[0] with 0 to prevent unforeseen access errors, and return
   //the failure result.
-  range_storage[0] = 0;
+  range_mins[0] = 0;
   //fill range storage with preset values
+  bdouble ratios = 2.0;
   for (int i = 1; i < K_CALC_MAXRANGE; ++i){
     //ensure i is a bdouble so calculations don't go badly with integer
     //truncation
     bdouble t = (bdouble) i;
-    range_storage[i] = t/(exp2(t) - 1);
-    range_mins[i] = t/(exp2(t + 1) - 2);
+    range_mins[i] = t/ratios;
+    ratios *= 2;
+    // std::cout << "range_mins[" << i << "] = " << range_mins[i] << std::endl;
   }
 }
 
@@ -69,19 +71,11 @@ lint RatioKCalculator::getTwoTInRange(bdouble r_goal, int range) const {
     std::cerr << std::endl;
     return 0;
   }
-  int t = range; //renaming for clarity
+  bdouble t = (bdouble) range; //renaming for clarity
   /* Formula for 2^t with exact perfection ratio, where r = ratio:
     2^t = (t/r) + 1
     For details on how this is acquired see readme. */
   bdouble two_t_float = (t/r_goal) + 1;
-  /*I did a lot of debugging and found that sometimes, even within the range
-    of acceptable a and b values, we simply get an overflow, in either the
-    bdouble or the lint, and it wraps back around.  There's nothing that can
-    really be done about this other than ignoring it and hoping it doesn't
-    matter or finding and using a library that allows >64bit numbers and
-    doubles with even more precision - more work than it's worth.
-
-    Basically, just hope that this doesn't screw up. */
   lint two_t = (lint)two_t_float;
   /*Nonetheless we add one more to our 2^t.  The reason for this is as follows:
     We need the first 2^t with a perfection ratio LESS THAN the desired
