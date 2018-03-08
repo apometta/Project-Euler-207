@@ -23,7 +23,7 @@ def getSmallestRatioInRange(t_range):
 the perfection ratio of that 2^t is smaller than the given ratio.  This
 assumes the inputted t-range has one such valid one: error testing should be
 done outside this function."""
-def getSmallestTwoT(ratio, t_range):
+def getSmallestTwoT(t_range, ratio):
     """r = t/(2^t - 1).  Solving for two_t grants:
        2^t = (t/r) + 1.  However, note that this can return one of two things:
     1. A 2^t which is not an integer.
@@ -31,7 +31,7 @@ def getSmallestTwoT(ratio, t_range):
        ratio to beat.
     Both of these have the same solution: turn the acquired 2^t to an integer
     and add one."""
-    two_t = long((t_range / ratio) + 1) + 1
+    two_t = int((t_range / ratio) + 1) + 1
     return two_t
 
 #Take in input and format it in queries list, sorted decreasing.
@@ -46,3 +46,20 @@ for line in file_lines:
     b = int(line[(space_ind + 1):])
     queries.append(a/b)
 queries.sort(reverse = True) #decreasing list of fractions
+
+#Create a current t-range tracker, keeping track of our current t-range.  Now
+#we iterate through t-ranges, not going to the next until we need to.  See
+#implementation section in readme.
+curr_t_range = 1
+#Keeping track of the current smallest ratio in a variable prevents needing to
+#recalculate it over and over - this can save a lot of cycles, since we may be
+#dealing with tens of thousands of queries and are doing an exponential
+#calculation every time we do.
+curr_min_ratio = getSmallestRatioInRange(curr_t_range)
+for q in queries:
+    while q < curr_min_ratio:
+        curr_t_range += 1
+        curr_min_ratio = getSmallestRatioInRange(curr_t_range)
+    #We know that curr_t_range has the correct one now.
+    two_t = getSmallestTwoT(curr_t_range, q)
+    print(convertTwoTToK(two_t))
