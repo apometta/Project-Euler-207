@@ -23,7 +23,8 @@ TST1 = test/test.txt
 TST2 = test/test2.txt
 TST3 = test/test3.txt
 TFLS = test/test*.txt
-PSRC = naive_attempt.py
+NSRC = naive_attempt.py
+PSRC = $(EXEC).py
 MERG = $(EXEC)_merged.cpp
 
 all: main
@@ -40,9 +41,6 @@ $(EXEC).cpp:
 
 clean: $(EXEC)
 	rm $(EXEC)
-
-naive: PSRC
-	python3 $(PSRC)
 
 test: $(TFLS)
 	./$(EXEC) <$(TST1)
