@@ -7,6 +7,33 @@ The readme file in this project explains the problem, solution and plan in
 more detail.  Please consult the readme for explanations for certain decisions.
 """
 
+"""Quick function for getting k from a given 2^t."""
+def convertTwoTToK(two_t):
+    #k = 2^t * (2*t - 1).  See readme for explanation.
+    return two_t * (two_t - 1)
+
+"""Returns smallest perfection ratio achievable in a given t-range."""
+def getSmallestRatioInRange(t_range):
+    #Just return the perfection ratio of the largest 2^t in this range.
+    #See readme for explanation.
+    largest_two_t = 2**(t_range + 1) - 1
+    return t_range/(largest_two_t - 1)
+
+"""Function taking in ratio and t-range to return the smallest 2^t for which
+the perfection ratio of that 2^t is smaller than the given ratio.  This
+assumes the inputted t-range has one such valid one: error testing should be
+done outside this function."""
+def getSmallestTwoT(ratio, t_range):
+    """r = t/(2^t - 1).  Solving for two_t grants:
+       2^t = (t/r) + 1.  However, note that this can return one of two things:
+    1. A 2^t which is not an integer.
+    2. An integer 2^t whose perfection ratio is exactly equal to the desired
+       ratio to beat.
+    Both of these have the same solution: turn the acquired 2^t to an integer
+    and add one."""
+    two_t = long((t_range / ratio) + 1) + 1
+    return two_t
+
 #Take in input and format it in queries list, sorted decreasing.
 import sys
 file_lines = sys.stdin.readlines()
@@ -19,5 +46,3 @@ for line in file_lines:
     b = int(line[(space_ind + 1):])
     queries.append(a/b)
 queries.sort(reverse = True) #decreasing list of fractions
-
-#Create list of minimum ratio in a given t-range.
