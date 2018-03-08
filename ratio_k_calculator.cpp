@@ -19,13 +19,11 @@ RatioKCalculator::RatioKCalculator(){
   //the failure result.
   range_mins[0] = 0;
   //fill range storage with preset values
-  bdouble ratios = 2.0;
   for (int i = 1; i < K_CALC_MAXRANGE; ++i){
     //ensure i is a bdouble so calculations don't go badly with integer
     //truncation
     bdouble t = (bdouble) i;
-    range_mins[i] = t/ratios;
-    ratios *= 2;
+    range_mins[i] = t/(exp2(t+1) - 2);
     // std::cout << "range_mins[" << i << "] = " << range_mins[i] << std::endl;
   }
 }

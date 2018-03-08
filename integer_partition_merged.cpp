@@ -1,17 +1,3 @@
-/* This file is a merged file of ratio_k_calculator.hpp,
-  ratio_k_calculator.cpp, and integer_partition.cpp in that order.  It is used
-  since HackerRank only lets you submit one file.  Do not use this file for
-  any other purpose. */
-
-
-
-
-
-
-
-
-
-
 /*Author: Andrew H. Pometta
   Last Updated: 2/23/2018
 
@@ -28,13 +14,10 @@
 typedef long double bdouble;
 typedef unsigned long long int lint;
 #define K_CALC_MINRATIO 1/(1e18 + 1) //based on problem restrictions on a and b
-#define K_CALC_MAXRANGE 67 //can be set to change code-wide maximum 2^t
+#define K_CALC_MAXRANGE 65 //can be set to change code-wide maximum 2^t
 
 class RatioKCalculator {
 private:
-  /*range_storage stores the perfection ratios at each integer t.  the index is
-    t, the value is the perfection ratio. */
-  bdouble range_storage[K_CALC_MAXRANGE];
   /*range_mins is, given a corresponding range, the minimum perfection ratio
     possible within that range.  Useful for finding the range for a 2^t. */
   bdouble range_mins[K_CALC_MAXRANGE];
@@ -78,7 +61,6 @@ public:
 };
 
 #endif
-
 /*Author: Andrew H. Pometta
   Last Updated: 2/23/2018
 890
@@ -88,6 +70,7 @@ public:
 
   For all functions, a return value of 0 means failure. */
 
+// #include "ratio_k_calculator.hpp"
 #include <cmath>
 #include <iostream>
 using namespace std;
@@ -95,16 +78,16 @@ using namespace std;
 /*The public constructor for RatioKCalculator fills the range_storage array
   with the relevant perfection ratios, where the t value is the index. */
 RatioKCalculator::RatioKCalculator(){
-  //fill range_storage 0 with 0 to prevent unforeseen access errors, and return
+  //fill range_mins[0] with 0 to prevent unforeseen access errors, and return
   //the failure result.
-  range_storage[0] = 0;
+  range_mins[0] = 0;
   //fill range storage with preset values
   for (int i = 1; i < K_CALC_MAXRANGE; ++i){
     //ensure i is a bdouble so calculations don't go badly with integer
     //truncation
     bdouble t = (bdouble) i;
-    range_storage[i] = t/(exp2(t) - 1);
-    range_mins[i] = t/(exp2(t + 1) - 2);
+    range_mins[i] = t/(exp2(t+1) - 2);
+    // std::cout << "range_mins[" << i << "] = " << range_mins[i] << std::endl;
   }
 }
 
@@ -149,19 +132,11 @@ lint RatioKCalculator::getTwoTInRange(bdouble r_goal, int range) const {
     std::cerr << std::endl;
     return 0;
   }
-  int t = range; //renaming for clarity
+  bdouble t = (bdouble) range; //renaming for clarity
   /* Formula for 2^t with exact perfection ratio, where r = ratio:
     2^t = (t/r) + 1
     For details on how this is acquired see readme. */
   bdouble two_t_float = (t/r_goal) + 1;
-  /*I did a lot of debugging and found that sometimes, even within the range
-    of acceptable a and b values, we simply get an overflow, in either the
-    bdouble or the lint, and it wraps back around.  There's nothing that can
-    really be done about this other than ignoring it and hoping it doesn't
-    matter or finding and using a library that allows >64bit numbers and
-    doubles with even more precision - more work than it's worth.
-
-    Basically, just hope that this doesn't screw up. */
   lint two_t = (lint)two_t_float;
   /*Nonetheless we add one more to our 2^t.  The reason for this is as follows:
     We need the first 2^t with a perfection ratio LESS THAN the desired
@@ -197,7 +172,6 @@ lint RatioKCalculator::getK(bdouble r_goal) const {
   //properly returns 0.
   return convertTwoTToK(getTwoTInRange(r_goal, getRange(r_goal)));
 }
-
 /*Author: Andrew H. Pometta
   Last updated: 2/23/2018
 
@@ -212,6 +186,7 @@ lint RatioKCalculator::getK(bdouble r_goal) const {
 
 #include <iostream>
 #include <cstdlib>
+// #include "ratio_k_calculator.hpp"
 using namespace std;
 
 int main(){
