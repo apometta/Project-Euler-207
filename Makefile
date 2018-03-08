@@ -49,3 +49,9 @@ test: $(TFLS)
 
 merge: $(MERG)
 	$(COMP) $(MERG) -o $(EXEC)_merged
+
+py: $(PSRC)
+	python3 $(PSRC)
+
+naive: $(NSRC)
+	python3 $(NSRC)
