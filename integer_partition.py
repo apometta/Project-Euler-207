@@ -32,9 +32,10 @@ def getSmallestTwoT(t_range, ratio):
     Both of these have the same solution: turn the acquired 2^t to an integer
     and add one."""
     two_t = int((t_range / ratio) + 1) + 1
+    print ("two_t = " + str(two_t))
     return two_t
 
-#Take in input and format it in queries list, sorted decreasing.
+#Take in input and format it in queries list.
 import sys
 file_lines = sys.stdin.readlines()
 num_queries = file_lines[0]
@@ -45,21 +46,17 @@ for line in file_lines:
     a = int(line[:space_ind])
     b = int(line[(space_ind + 1):])
     queries.append(a/b)
-queries.sort(reverse = True) #decreasing list of fractions
 
-#Create a current t-range tracker, keeping track of our current t-range.  Now
-#we iterate through t-ranges, not going to the next until we need to.  See
-#implementation section in readme.
-curr_t_range = 1
-#Keeping track of the current smallest ratio in a variable prevents needing to
-#recalculate it over and over - this can save a lot of cycles, since we may be
-#dealing with tens of thousands of queries and are doing an exponential
-#calculation every time we do.
-curr_min_ratio = getSmallestRatioInRange(curr_t_range)
+#Fill array of minimum ranges for faster computation/searching
+min_ranges = [0] #0 stored in 0th spot to avoid potential crash
+for t in range(1, 65):
+    min_ranges.append(getSmallestRatioInRange(t))
+
 for q in queries:
-    while q < curr_min_ratio:
-        curr_t_range += 1
-        curr_min_ratio = getSmallestRatioInRange(curr_t_range)
-    #We know that curr_t_range has the correct one now.
-    two_t = getSmallestTwoT(curr_t_range, q)
+    print("q = " + str(q))
+    t_range = 1
+    while q <= min_ranges[t_range]:
+        t_range += 1
+    print("range = " + str(t_range))
+    two_t = getSmallestTwoT(t_range, q)
     print(convertTwoTToK(two_t))
