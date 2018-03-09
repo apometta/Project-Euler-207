@@ -31,8 +31,7 @@ def getSmallestTwoT(t_range, ratio):
        ratio to beat.
     Both of these have the same solution: turn the acquired 2^t to an integer
     and add one."""
-    two_t = int((t_range / ratio) + 1) + 1
-    print ("two_t = " + str(two_t))
+    two_t = int(((t_range * ratio[1]) / ratio[0]) + 1) + 1
     return two_t
 
 #Take in input and format it in queries list.
@@ -45,7 +44,9 @@ for line in file_lines:
     space_ind = line.find(" ")
     a = int(line[:space_ind])
     b = int(line[(space_ind + 1):])
-    queries.append(a/b)
+    #To avoid errors between decimal and binary, we keep it as a tuple as
+    #long as possible.
+    queries.append((a, b))
 
 #Fill array of minimum ranges for faster computation/searching
 min_ranges = [0] #0 stored in 0th spot to avoid potential crash
@@ -53,10 +54,10 @@ for t in range(1, 65):
     min_ranges.append(getSmallestRatioInRange(t))
 
 for q in queries:
-    print("q = " + str(q))
     t_range = 1
-    while q <= min_ranges[t_range]:
+    #We can successfully bank on there being no errors when comparing for the
+    #min ranges, but if we need to we can check the range manually later
+    while (q[0]/q[1]) <= min_ranges[t_range]:
         t_range += 1
-    print("range = " + str(t_range))
     two_t = getSmallestTwoT(t_range, q)
     print(convertTwoTToK(two_t))
