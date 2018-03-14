@@ -49,15 +49,16 @@ for line in file_lines:
     queries.append((a, b))
 
 #Fill array of minimum ranges for faster computation/searching
-min_ranges = [0] #0 stored in 0th spot to avoid potential crash
+min_ranges = [(0, 0)] #0 stored in 0th spot to avoid potential crash
 for t in range(1, 65):
-    min_ranges.append(getSmallestRatioInRange(t))
+    denom = 2**(t+1) - 2
+    min_ranges.append((t, denom))
 
 for q in queries:
     t_range = 1
     #We can successfully bank on there being no errors when comparing for the
     #min ranges, but if we need to we can check the range manually later
-    while (q[0]/q[1]) <= min_ranges[t_range]:
+    while (q[0] * min_ranges[t_range][1]) <= (q[1] * min_ranges[t_range][0]):
         t_range += 1
     two_t = getSmallestTwoT(t_range, q)
     print(convertTwoTToK(two_t))
